@@ -61,6 +61,20 @@ static void MX_GPIO_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+//ex7: ham clearAllClock
+void clearAllClock(){
+	GPIOA -> BSRR = 0xFFFF0000;
+}
+//ex8: ham setNumberOnClock
+void setNumberOnClock(int num){
+	if (num < 0 || num > 11) return;
+	GPIOA -> BSRR = (1 <<(num + 4));
+}
+//ex9: ham clearNumberOnClock
+void clearNumberOnClock(int num){
+	if (num < 0 || num > 11) return;
+	GPIOA -> BSRR = (1 << (num + 4 + 16));
+}
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -91,12 +105,47 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int count = 0;
-  while (1){
-	  count++;
-	  if (count >= 13) count = 0;
-	  GPIOA-> ODR = (1<< (count + 3));
-	  HAL_Delay(1000);
+  clearAllClock();
+  int countMin = 0; //max 60
+  int countSec = 0; //max 60
+  int countHour = 0; //max 11
+  int displaySec = 0;
+  int displayMin = 0;
+  int prevMin = 0;
+  int prevHour = 0;
+  int prevSec = 0;
+  while (1)
+  {
+	prevSec = displaySec;
+	prevMin = displayMin;
+	prevHour = countHour;
+	if (countSec >=  60){
+		countMin++;
+		countSec = 0;
+	}
+	if (countMin >= 60){
+		countHour++;
+		countMin = 0;
+	}
+	if (countHour >= 12){
+		countHour = 0;
+	}
+	displaySec = countSec / 5;
+	displayMin = countMin / 5;
+	if (prevSec != displaySec){
+		clearNumberOnClock(prevSec);
+	}
+	if (prevMin != displayMin){
+		clearNumberOnClock(prevMin);
+	}
+	if (prevHour != countHour){
+		clearNumberOnClock(prevHour);
+	}
+	setNumberOnClock(displaySec);
+	setNumberOnClock(displayMin);
+	setNumberOnClock(countHour);
+	countSec++;
+	HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

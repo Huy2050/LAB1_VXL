@@ -47,6 +47,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -83,17 +84,73 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  int counter1 = 5;
+  int counter2 = 3;
+  int state = 0;
   while (1)
   {
-    /* USER CODE END WHILE */
+  /*
+  * counter1: lan duong chinh (cho den do)
+  * counter2: lan duong phu (cho den xanh den vang)
+  * state 0, 1: lan duong chinh la lan 1
+  * state 2, 3: lan duong chinh la lan 2
+  * state 0, 2: den do va den xanh sang
+  * state 1, 3: den do va den vang sang*/
+	  if (counter1 > 0 && counter2 <= 0 && state == 0){
+  		 //RED - GREEN -> RED - YELLOW, MAIN ROAD 1
+  		 state = 1;
+  		 counter2 = 2;
+	  }
+	  if (counter1 <= 0 && counter2 <= 0 && state == 1){
+  		 //RED - YELLOW -> RED - GREEN, MAIN 1 -> 2
+  		 state = 2;
+  		 counter1 = 5;
+  		 counter2 = 3;
+	  }
+	  if (counter1 > 0 && counter2 <= 0 && state == 2){
+  		 //RED - GREEN -> RED - YELLOW, MAIN 2
+  		 state = 3;
+  		 counter2 = 2;
+	  }
+	  if (counter1 <= 0 && counter2 <= 0 && state == 3){
+  		 //RED - YELLOW -> RED - GREEN, MAIN 2 -> 1
+  		 state = 0;
+  		 counter1 = 5;
+  		 counter2 = 3;
+	  }
+	  switch (state){
+  	 	 case 0:
+  	 		counter1--;
+  	 		counter2--;
+  	 		GPIOA -> ODR = (1 << 5) | (1<< 9);
+  	 		break;
+  	 	 case 1:
+  	 		counter1--;
+  	 		counter2--;
+  	 		GPIOA -> ODR = (1 << 5) | (1 << 10);
+  	 		break;
+  	 	case 2:
+  	 		counter1--;
+  	 		counter2--;
+  	 		GPIOA -> ODR = (1 << 6) | (1 << 8);
+  	 		break;
+  	 	case 3:
+  	 		counter1--;
+  	 		counter2--;
+  	 		GPIOA -> ODR = (1 << 7) | (1 << 8);
+  	 		break;
+	  }
+	  HAL_Delay(1000);
+      /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+      /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
@@ -131,6 +188,33 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, LED_1_Pin|LED_2_Pin|LED_3_Pin|LED_4_Pin
+                          |LED_5_Pin|LED_6_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : LED_1_Pin LED_2_Pin LED_3_Pin LED_4_Pin
+                           LED_5_Pin LED_6_Pin */
+  GPIO_InitStruct.Pin = LED_1_Pin|LED_2_Pin|LED_3_Pin|LED_4_Pin
+                          |LED_5_Pin|LED_6_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */

@@ -176,7 +176,7 @@ int main(void)
  80001b6:	2b01      	cmp	r3, #1
  80001b8:	d013      	beq.n	80001e2 <main+0x96>
  80001ba:	e038      	b.n	800022e <main+0xe2>
-  	    case 0: // đỏ
+  	    case 0: // red on
   	    	counter--;
  80001bc:	687b      	ldr	r3, [r7, #4]
  80001be:	3b01      	subs	r3, #1
@@ -199,7 +199,7 @@ int main(void)
   	        break;
  80001e0:	e025      	b.n	800022e <main+0xe2>
 
-  	    case 1: // xanh
+  	    case 1: // green on
   	    	counter--;
  80001e2:	687b      	ldr	r3, [r7, #4]
  80001e4:	3b01      	subs	r3, #1
@@ -222,7 +222,7 @@ int main(void)
   	        break;
  8000206:	e012      	b.n	800022e <main+0xe2>
 
-  	    case 2: // vàng
+  	    case 2: // yellow on
   	    	counter--;
  8000208:	687b      	ldr	r3, [r7, #4]
  800020a:	3b01      	subs	r3, #1
@@ -245,7 +245,7 @@ int main(void)
   	        break;
  800022c:	bf00      	nop
   	    }
-  HAL_Delay(1000);
+  	HAL_Delay(1000);
  800022e:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
  8000232:	f000 f95f 	bl	80004f4 <HAL_Delay>
   	if (counter <= 0 && state == 0){

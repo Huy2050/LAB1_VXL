@@ -108,28 +108,28 @@ int main(void)
   		counter = 5; //chuyen ve do
   	}
   	switch (state){
-  	    case 0: // đỏ
+  	    case 0: // red on
   	    	counter--;
   	        HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);   // RED sáng
   	        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET); // GREEN tắt
   	        HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_RESET); // YELLOW tắt
   	        break;
 
-  	    case 1: // xanh
+  	    case 1: // green on
   	    	counter--;
   	        HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);   // RED tắt
   	        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET); // GREEN sáng
   	        HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_RESET); // YELLOW tắt
   	        break;
 
-  	    case 2: // vàng
+  	    case 2: // yellow on
   	    	counter--;
   	        HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);   // RED tắt
   	        HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);   // GREEN tắt
   	        HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_SET); // YELLOW sáng
   	        break;
   	    }
-  HAL_Delay(1000);
+  	HAL_Delay(1000);
       /* USER CODE END WHILE */
 
       /* USER CODE BEGIN 3 */
